@@ -19,8 +19,7 @@ To (locally) reproduce this project, do the following:
    julia> Pkg.instantiate()
    ```
 
-This will install all necessary packages for you to be able to run the scripts and
-everything should work out of the box, including correctly finding local paths.
+This will install all necessary packages for you to be able to run the scripts and everything should work out of the box, including correctly finding local paths.
 
 You may notice that most scripts start with the commands:
 ```julia
@@ -28,3 +27,5 @@ using DrWatson
 @quickactivate "AGES"
 ```
 which auto-activate the project and enable local path handling from DrWatson.
+
+Note that source and processed data are not included in the repository. The data are available upon request.
