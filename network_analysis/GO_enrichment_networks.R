@@ -27,7 +27,8 @@ target_go <- function(x) {
         custom_bg = bg, 
         correction_method="fdr", 
         evcodes=TRUE, 
-        sources=c("GO:MF", "GO:BP", "GO:CC", "KEGG", "REAC", "WP", "MIRNA", "HPA", "HP"))
+        sources=c("GO:MF", "GO:BP", "GO:CC", "KEGG", "REAC", "WP", "MIRNA", "HPA", "HP"),
+        highlight=TRUE)
     
     return(gostres$result)
 }
@@ -50,10 +51,11 @@ go_count <- count_terms(go_df)
 
 #remove columns, annotate and reorder
 go_count <- subset(go_count, select = -c(parents, query, significant))
-go_anno <- merge(go_count, subset(pro_ref, select=c(S_ID, Protein_name)), by.x='S_ID_A', by.y='S_ID')
-go_anno <- go_anno[, c("S_ID_A", "Protein_name", "term_id", "term_name", "number_of_networks", 
+net_ref <- subset(net, select=c(S_ID_A, Protein_name_A)) %>% distinct()
+go_anno <- merge(go_count, net_ref, by='S_ID_A')
+go_anno <- go_anno[, c("S_ID_A", "Protein_name_A", "term_id", "term_name", "number_of_networks", 
         "p_value", "term_size", "query_size", "intersection_size", "precision", "recall", "source", 
-        "effective_domain_size", "source_order", "intersection")]
+        "effective_domain_size", "source_order", "highlighted", "intersection")]
 
 #export results
 write.table(go_anno, out_fn, row.names=FALSE, sep="\t", quote = FALSE)

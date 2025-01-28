@@ -13,12 +13,16 @@ net=pd.read_csv(net_fn, delimiter='\t')
 
 #import ranking and protein annotation
 rank_fn=config['paths']['rank_fn']
+score=config['score']
 rank=pd.read_csv(rank_fn, delimiter='\t')
 
 def filt_net(n):
 
     #select top networks
-    top=rank.loc[rank['Score'] >= n]
+    if score == True:
+        top=rank.loc[rank['Score'] >= n]
+    else:
+        top=rank
 
     #filter network
     net_top=pd.merge(net, top[['Protein_name_A']], on='Protein_name_A', how='inner')
@@ -41,7 +45,10 @@ net_rank=filt_net(rank_n)
 
 #export ranked networks
 out_pre=config['paths']['out_pre']
-net_rank.to_csv(out_pre+'_ranked'+str(rank_n)+'.tsv', sep='\t', index=None)
+if score == True:
+    net_rank.to_csv(out_pre+'_ranked'+str(rank_n)+'.tsv', sep='\t', index=None)
+else:
+    net_rank.to_csv(out_pre+'_ranked.tsv', sep='\t', index=None)
 
 #export ranked networks following B-protein filtering
 if config['bfilt'] == True:
