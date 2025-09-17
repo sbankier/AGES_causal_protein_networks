@@ -10,8 +10,9 @@ with open(config_path, "r") as config_file:
 
 #import findr networks
 res_fn=config['paths']['res_fn']
+test=config['test']['test']
 res=pd.read_csv(res_fn, delimiter='\t')
-res_pp=res.loc[res['p2p5'] > 0.5]
+res_pp=res.loc[res[test] > 0.5]
 
 #import protein reference
 pro_ref=pd.read_csv('data/proteins/protein_annotations_filtered.txt', delimiter='\t')
@@ -44,9 +45,9 @@ def filt_net(net, trd, test):
     
     return net_fdr
 
-fdr1=filt_net(res_filt, 0.01, 'p2p5')
-fdr5=filt_net(res_filt, 0.05, 'p2p5')
-fdr10=filt_net(res_filt, 0.1, 'p2p5')
+fdr1=filt_net(res_filt, 0.01, test)
+fdr5=filt_net(res_filt, 0.05, test)
+fdr10=filt_net(res_filt, 0.1, test)
 
 #export FDR filtered networks
 out_pre=config['paths']['out_pre']
